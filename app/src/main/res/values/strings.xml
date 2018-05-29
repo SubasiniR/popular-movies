@@ -1,3 +1,19 @@
 <resources>
     <string name="app_name">Popular Movies</string>
+    <string name="details_activity_title">Movie Details</string>
+
+    <string name="sort_by">Sort By</string>
+
+    <string name="action_popular">Most Popular</string>
+    <string name="action_top_rated">Top-rated</string>
+
+    <string name="tv_title_label">Title</string>
+    <string name="tv_release_date_label">Released On</string>
+    <string name="tv_vote_average_label">Vote-Average</string>
+    <string name="tv_plot_label">Plot</string>
+
+    <string name="movie_backdrop_content_description">Movie backdrop image</string>
+
+    <string name="content_provider_authorities">com.example.popularmovies</string>
+
 </resources>
