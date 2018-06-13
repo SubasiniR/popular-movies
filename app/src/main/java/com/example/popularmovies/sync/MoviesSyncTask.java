@@ -30,6 +30,7 @@ public class MoviesSyncTask {
             /* Use the URL to retrieve the JSON */
             String jsonMoviesResponse = NetworkUtils.getResponseFromHttpUrl(moviesRequestUrl);
 
+            //TODO getUrl for the ids, reviews and trailers, retrive the json and pass it to openMoviesJsonUtils
 //            Log.v(TAG, "Built URI " + jsonMoviesResponse);
 
 

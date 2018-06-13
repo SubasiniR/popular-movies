@@ -34,8 +34,9 @@ public class OpenMoviesJsonUtils {
 
         JSONArray movieResultsJsonArray = movieResultsJson.getJSONArray(MOVIES_RESULTS);
 
-        ContentValues[] movieContentValues = new ContentValues[movieResultsJsonArray.length()];
+        //TODO: extract JSONARRAY for ids, reviews and trailer and put it in the contentvalues.
 
+        ContentValues[] movieContentValues = new ContentValues[movieResultsJsonArray.length()];
 
         for (int i = 0; i < movieResultsJsonArray.length(); i++) {
 

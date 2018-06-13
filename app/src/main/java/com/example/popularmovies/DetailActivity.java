@@ -1,6 +1,5 @@
 package com.example.popularmovies;
 
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -22,12 +21,15 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class DetailActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
 
     final static String[] MOVIES_DETAIL_PROJECTION = {
             MoviesContract.MoviesEntry._ID,
-            MoviesContract.MoviesEntry.COLUMN_MOVIE_BACKDROP_LINK,
+            MoviesContract.MoviesEntry.COLUMN_MOVIE_POSTER_LINK,
             MoviesContract.MoviesEntry.COLUMN_TITLE,
             MoviesContract.MoviesEntry.COLUMN_RELEASE_DATE,
             MoviesContract.MoviesEntry.COLUMN_VOTE_AVERAGE,
@@ -35,7 +37,7 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
     };
 
     public static final int INDEX_ID = 0;
-    public static final int INDEX_MOVIE_BACKDROP_PATH = 1;
+    public static final int INDEX_MOVIE_POSTER_PATH = 1;
     public static final int INDEX_MOVIE_TITLE = 2;
     public static final int INDEX_MOVIE_RELEASE_DATE = 3;
     public static final int INDEX_MOVIE_VOTE_AVERAGE = 4;
@@ -46,27 +48,21 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
 //    private Uri mUri;
     private String mMovieId;
 
-    private ImageView mBackdropIv;
-    private TextView mTitleTv;
-    private TextView mReleaseDateTv;
-    private TextView mVoteAverageTv;
-    private TextView mPlotSynopsisTv;
+    @BindView(R.id.tv_movie_title_label) TextView mTitleTV;
+    @BindView(R.id.iv_movie_poster) ImageView mPosterIV;
+    @BindView(R.id.tv_release_year) TextView mReleaseYearTV;
+//    @BindView(R.id.tv_movie_total_time) TextView mTotalTimeTV;
+    @BindView(R.id.tv_vote_average) TextView mVoteAverageTV;
+    @BindView(R.id.fav_button) TextView mFavoriteBtn;
+    @BindView(R.id.tv_plot) TextView mPlotTV;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        mBackdropIv =findViewById(R.id.iv_movie_backdrop);
-        mTitleTv = findViewById(R.id.tv_movie_title);
-        mReleaseDateTv = findViewById(R.id.tv_release_date);
-        mVoteAverageTv = findViewById(R.id.tv_vote_average);
-        mPlotSynopsisTv = findViewById(R.id.tv_plot);
-
-//        mUri = getIntent().getData();
-//        if (mUri == null) {
-//            throw new NullPointerException("URI for DetailActivity cannot be null");
-//        }
+        ButterKnife.bind(this);
 
         Intent intent = getIntent();
         int id = intent.getExtras().getInt(MainActivity.MOVIE_ID);
@@ -111,20 +107,20 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
             return;
         }
 
-        String backdropPartPath = data.getString(INDEX_MOVIE_BACKDROP_PATH);
-        String backdropUrl = null;
-        if(backdropPartPath != null){
-            backdropUrl = NetworkUtils.getImageUrl(backdropPartPath).toString();
+        String posterPartPath = data.getString(INDEX_MOVIE_POSTER_PATH);
+        String posterUrl = null;
+        if(posterPartPath != null){
+            posterUrl = NetworkUtils.getImageUrl(posterPartPath).toString();
         }
-        Context context = mBackdropIv.getContext();
-        Picasso.with(context).load(backdropUrl).placeholder(R.drawable.place_holder_image).error(R.drawable.error_image).into(mBackdropIv);
+
+        Picasso.with(this).load(posterUrl).placeholder(R.drawable.place_holder_image).error(R.drawable.error_image).into(mPosterIV);
 
         String title = data.getString(INDEX_MOVIE_TITLE);
-        mTitleTv.setText(title);
+        mTitleTV.setText(title);
 
         String releaseDate = data.getString(INDEX_MOVIE_RELEASE_DATE);
         DateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd");
-        DateFormat outputFormat = new SimpleDateFormat("dd MMM yyyy");
+        DateFormat outputFormat = new SimpleDateFormat("yyyy");
         Date date = null;
         try {
             date = inputFormat.parse(releaseDate);
@@ -137,14 +133,16 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
         }else {
             formattedReleaseDate = "Information not available";
         }
-        mReleaseDateTv.setText(formattedReleaseDate);
+        mReleaseYearTV.setText(formattedReleaseDate);
 
-        String voteAvg = String.valueOf(data.getInt(INDEX_MOVIE_VOTE_AVERAGE)) + "/10";
-        mVoteAverageTv.setText(voteAvg);
+        String voteAvg = data.getString(INDEX_MOVIE_VOTE_AVERAGE) + "/10";
+        mVoteAverageTV.setText(voteAvg);
 
         String plot = data.getString(INDEX_MOVIE_PLOT_SYNOPSIS);
-        mPlotSynopsisTv.setText(plot);
+        mPlotTV.setText(plot);
 
+        //TEMP data
+//        mTotalTimeTV.setText("120mins");
     }
 
     @Override

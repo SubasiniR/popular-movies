@@ -2,25 +2,31 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <!--<item
-        android:id="@+id/sort_by_spinner"
-        android:actionLayout="@layout/support_simple_spinner_dropdown_item"
+    <item
+        android:id="@+id/sort_by_menu"
         android:title="@string/sort_by"
-        app:actionViewClass="android.widget.Spinner"
-        app:showAsAction="always" />-->
+        app:showAsAction="always|withText">
 
-    <item android:id="@+id/title"
-        android:title="@string/sort_by"
-        android:checkable="false"
-        android:enabled="false"
-        android:visible="true"/>
+        <menu>
+            <group
+                android:checkableBehavior="single">
 
-    <item android:id="@+id/action_popular"
-        android:title="@string/action_popular"
-        app:showAsAction="never" />
+            <item
+                android:id="@+id/action_popular"
+                android:title="@string/action_popular"
+                app:showAsAction="never" />
 
-    <!-- Location Found -->
-    <item android:id="@+id/action_top_rated"
-        android:title="@string/action_top_rated"
-        app:showAsAction="never" />
+            <item
+                android:id="@+id/action_top_rated"
+                android:title="@string/action_top_rated"
+                app:showAsAction="never" />
+
+             <item
+                 android:id="@+id/action_favorite"
+                 android:title="@string/action_favorite"
+                 app:showAsAction="never"/>
+            </group>
+        </menu>
+    </item>
+
 </menu>

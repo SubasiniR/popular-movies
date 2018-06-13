@@ -40,6 +40,10 @@ public class MoviesDbHelper extends SQLiteOpenHelper {
          * This String will contain a simple SQL statement that will create a table that will
          * cache our movies data.
          */
+
+        //TODO ADD columns to the table creation for (ids?) reviews and trailers
+        //increment the db version above.
+
         final String SQL_CREATE_MOVIES_TABLE =
 
                 "CREATE TABLE " + MoviesEntry.TABLE_NAME + " (" +

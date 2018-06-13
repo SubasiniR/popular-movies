@@ -117,20 +117,26 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<C
         int id = item.getItemId();
 
         if (id == R.id.action_popular) {
-//            Toast.makeText(this, "You have selected Popular movies", Toast.LENGTH_LONG).show();
+
+            item.setChecked(true);
 
             MoviesSyncUtils.startImmediateSync(MainActivity.this, DEFAULT_SORT_PREFERENCE);
 
             return true;
         }
         if (id == R.id.action_top_rated) {
-//            Toast.makeText(this, "You have selected Top-rated movies", Toast.LENGTH_LONG).show();
+
+            item.setChecked(true);
 
             MoviesSyncUtils.startImmediateSync(MainActivity.this, TOP_RATED_SORT_PREFERENCE);
 
             return true;
         }
 
+        if(id == R.id.action_favorite){
+            item.setChecked(true);
+            //todo show only movies that are marked favorite here
+        }
         return super.onOptionsItemSelected(item);
     }
 

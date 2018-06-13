@@ -6,6 +6,7 @@
 
     <string name="action_popular">Most Popular</string>
     <string name="action_top_rated">Top-rated</string>
+    <string name="action_favorite">Favorites</string>
 
     <string name="tv_title_label">Title</string>
     <string name="tv_release_date_label">Released On</string>
@@ -15,5 +16,7 @@
     <string name="movie_backdrop_content_description">Movie backdrop image</string>
 
     <string name="content_provider_authorities">com.example.popularmovies</string>
+    <string name="movie_poster_iv_content_desc">Movie Poster Image</string>
+    <string name="mark_as_favorite_button">Mark As Favorite</string>
 
 </resources>
