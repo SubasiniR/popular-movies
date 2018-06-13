@@ -1,81 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.example.popularmovies.DetailActivity"
-    android:background="#E3F2FD">
+    android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <android.support.constraint.ConstraintLayout
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_margin="8dp">
+        android:layout_width="match_parent">
 
         <TextView
-            android:id="@+id/tv_movie_title"
+            android:id="@+id/tv_movie_title_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-            android:textStyle="bold"/>
+            android:background="@color/colorSecondary"
+            android:padding="16dp"
+            android:textColor="@color/white"
+            android:textSize="32dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Movie" />
 
         <ImageView
-            android:id="@+id/iv_movie_backdrop"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:id="@+id/iv_movie_poster"
+            android:layout_width="126dp"
+            android:layout_height="168dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
             android:adjustViewBounds="true"
-            android:contentDescription="@string/movie_backdrop_content_description"
-            android:layout_marginTop="8dp"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_movie_title_label"
+            app:srcCompat="@drawable/place_holder_image" />
 
         <TextView
-            android:id="@+id/tv_release_date_label"
-            android:layout_width="match_parent"
+            android:id="@+id/tv_release_year"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/tv_release_date_label"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
             android:textStyle="bold"
-            android:layout_marginTop="8dp"/>
+            app:layout_constraintStart_toEndOf="@+id/iv_movie_poster"
+            app:layout_constraintTop_toBottomOf="@+id/tv_movie_title_label"
+            tools:text="2015" />
 
-        <TextView
-            android:id="@+id/tv_release_date"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-            android:layout_marginTop="4dp"/>
-
-        <TextView
-            android:id="@+id/tv_vote_average_label"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/tv_vote_average_label"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-            android:textStyle="bold"
-            android:layout_marginTop="8dp"/>
+        <!--<TextView-->
+            <!--android:id="@+id/tv_movie_total_time"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginLeft="16dp"-->
+            <!--android:layout_marginStart="16dp"-->
+            <!--android:layout_marginTop="4dp"-->
+            <!--android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"-->
+            <!--android:textStyle="bold"-->
+            <!--app:layout_constraintStart_toEndOf="@+id/iv_movie_poster"-->
+            <!--app:layout_constraintTop_toBottomOf="@+id/tv_release_year"-->
+            <!--tools:text="120min" />-->
 
         <TextView
             android:id="@+id/tv_vote_average"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-            android:layout_marginTop="4dp"/>
-
-        <TextView
-            android:id="@+id/tv_plot_label"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/tv_plot_label"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
             android:textStyle="bold"
-            android:layout_marginTop="8dp"/>
+            app:layout_constraintStart_toEndOf="@+id/iv_movie_poster"
+            app:layout_constraintTop_toBottomOf="@+id/tv_release_year"
+            tools:text="8.1/10" />
+
+        <ToggleButton
+            android:id="@+id/fav_button"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/mark_as_favorite_button"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_movie_poster"
+            app:layout_constraintStart_toEndOf="@+id/iv_movie_poster"
+            app:layout_constraintTop_toBottomOf="@+id/tv_vote_average" />
 
         <TextView
             android:id="@+id/tv_plot"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="12dp"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="8dp"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_movie_poster"
+            tools:text="@string/tv_plot_label" />
 
-
-    </LinearLayout>
+    </android.support.constraint.ConstraintLayout>
 </ScrollView>
