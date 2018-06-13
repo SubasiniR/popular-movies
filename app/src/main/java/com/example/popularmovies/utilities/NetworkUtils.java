@@ -4,6 +4,8 @@ import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
 
+import com.example.popularmovies.BuildConfig;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -31,7 +33,7 @@ public final class NetworkUtils {
 
 
     //TODO Add the API KEY below. Get the key from themoviedb.org
-    private static String API_KEY = "";
+    private static String API_KEY = BuildConfig.ApiKey;
 
 
     public static URL getUrl(Context context, String sortPreference) {
