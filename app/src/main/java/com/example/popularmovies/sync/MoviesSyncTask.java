@@ -53,7 +53,6 @@ public class MoviesSyncTask {
                         MoviesContract.MoviesEntry.CONTENT_URI,
                         moviesContentValues);
 
-
             }
 
         } catch (Exception e) {

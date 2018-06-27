@@ -19,21 +19,17 @@ import com.squareup.picasso.Picasso;
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdapterViewHolder>{
 
-//    private String[] mImageString = new String[0];
     LayoutInflater mLayoutInflater;
     private final Context mContext;
 
     private final MoviesAdapterOnClickHandler mClickHandler;
 
     public interface MoviesAdapterOnClickHandler{
-        void onClick(int id);
+        void onClick(int id, String title, String releaseDate, String poster, String vote, String plot);
     }
 
     private Cursor mCursor;
 
-//
-//    public MoviesAdapter(){
-//    }
 
     public MoviesAdapter(@NonNull Context context, MoviesAdapterOnClickHandler clickHandler){
         mContext = context;
@@ -72,11 +68,6 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdap
         return mCursor.getCount();
     }
 
-//    public void setMoviesThumbnail(String[] imageString) {
-//        mImageString = imageString;
-//        notifyDataSetChanged();
-//    }
-
     void swapCursor(Cursor newCursor) {
         mCursor = newCursor;
         notifyDataSetChanged();
@@ -100,7 +91,12 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdap
             int adapterPosition = getAdapterPosition();
             mCursor.moveToPosition(adapterPosition);
             int id = mCursor.getInt(MainActivity.INDEX_MOVIE_ID);
-            mClickHandler.onClick(id);
+            String title = mCursor.getString(MainActivity.INDEX_MOVIE_TITLE);
+            String releaseDate = mCursor.getString(MainActivity.INDEX_MOVIE_RELEASE_DATE);
+            String poster = mCursor.getString(MainActivity.INDEX_MOVIE_POSTER_LINK);
+            String vote = mCursor.getString(MainActivity.INDEX_MOVIE_VOTE_AVERAGE);
+            String plot = mCursor.getString(MainActivity.INDEX_MOVIE_PLOT_SYNOPSIS);
+            mClickHandler.onClick(id, title, releaseDate, poster, vote, plot);
         }
     }
 }

@@ -26,15 +26,34 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<C
         MoviesAdapter.MoviesAdapterOnClickHandler {
 
     public static final String MOVIE_ID = "movieId";
+    public static final String TITLE = "title";
+    public static final String RELEASE_DATE = "release_date";
+    public static final String POSTER_LINK = "poster_link";
+    public static final String VOTE = "vote";
+    public static final String PLOT = "plot";
+
     public static final String DEFAULT_SORT_PREFERENCE = "popular";
     public static final String TOP_RATED_SORT_PREFERENCE = "top_rated";
+
     public static final String[] MAIN_MOVIE_POSTER_PROJECTION = {
+            MoviesContract.MoviesEntry.COLUMN_MOVIE_ID,
+            MoviesContract.MoviesEntry.COLUMN_MOVIE_TITLE,
+            MoviesContract.MoviesEntry.COLUMN_MOVIE_RELEASE_DATE,
             MoviesContract.MoviesEntry.COLUMN_MOVIE_POSTER_LINK,
-            MoviesContract.MoviesEntry._ID
+            MoviesContract.MoviesEntry.COLUMN_MOVIE_VOTE_AVERAGE,
+            MoviesContract.MoviesEntry.COLUMN_MOVIE_PLOT_SYNOPSIS
     };
-    public static final int INDEX_MOVIE_POSTER_LINK = 0;
-    public static final int INDEX_MOVIE_ID = 1;
+    public static final int INDEX_MOVIE_ID = 0;
+    public static final int INDEX_MOVIE_TITLE = 1;
+    public static final int INDEX_MOVIE_RELEASE_DATE = 2;
+    public static final int INDEX_MOVIE_POSTER_LINK = 3;
+    public static final int INDEX_MOVIE_VOTE_AVERAGE = 4;
+    public static final int INDEX_MOVIE_PLOT_SYNOPSIS = 5;
+
+
     private static final int MOVIES_LOADER_ID = 44;
+    private static final int FAVORITE_MOVIES_LOADER_ID = 55;
+
     private RecyclerView mRecyclerView;
     private int mPosition = RecyclerView.NO_POSITION;
     private MoviesAdapter mMoviesAdapter;
@@ -53,7 +72,6 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<C
 
         if (isNetworkConnectionAvailable()) {
             getSupportLoaderManager().initLoader(MOVIES_LOADER_ID, null, this);
-
             MoviesSyncUtils.initialize(this, DEFAULT_SORT_PREFERENCE);
         } else {
             Toast.makeText(this, "Network not available. Check the internet connection.", Toast.LENGTH_LONG).show();
@@ -64,10 +82,12 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<C
     @Override
     public Loader<Cursor> onCreateLoader(int loaderId, Bundle bundle) {
 
+        Uri moviesQueryUri = MoviesContract.MoviesEntry.CONTENT_URI;
+        Uri moviesFavQueryUri = MoviesContract.MoviesEntry.CONTENT_URI_FAV;
+
         switch (loaderId) {
 
             case MOVIES_LOADER_ID:
-                Uri moviesQueryUri = MoviesContract.MoviesEntry.CONTENT_URI;
 
                 return new CursorLoader(this,
                         moviesQueryUri,
@@ -75,6 +95,17 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<C
                         null,
                         null,
                         null);
+
+
+            case FAVORITE_MOVIES_LOADER_ID:
+
+                return new CursorLoader(this,
+                        moviesFavQueryUri,
+                        MAIN_MOVIE_POSTER_PROJECTION,
+                        null,
+                        null,
+                        null);
+
 
             default:
                 throw new RuntimeException("Loader Not Implemented: " + loaderId);
@@ -130,20 +161,30 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<C
 
             MoviesSyncUtils.startImmediateSync(MainActivity.this, TOP_RATED_SORT_PREFERENCE);
 
+
             return true;
         }
 
         if(id == R.id.action_favorite){
+
             item.setChecked(true);
-            //todo show only movies that are marked favorite here
+
+            getSupportLoaderManager().restartLoader(FAVORITE_MOVIES_LOADER_ID, null, this);
+
         }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
-    public void onClick(int id) {
+    public void onClick(int movieId, String title, String date, String poster, String vote, String plot) {
         Intent intentToStartDetailsActivity = new Intent(MainActivity.this, DetailActivity.class);
-        intentToStartDetailsActivity.putExtra(MOVIE_ID, id);
+        intentToStartDetailsActivity.putExtra(MOVIE_ID, movieId);
+        intentToStartDetailsActivity.putExtra(TITLE, title);
+        intentToStartDetailsActivity.putExtra(RELEASE_DATE, date);
+        intentToStartDetailsActivity.putExtra(POSTER_LINK, poster);
+        intentToStartDetailsActivity.putExtra(VOTE, vote);
+        intentToStartDetailsActivity.putExtra(PLOT, plot);
+
         startActivity(intentToStartDetailsActivity);
     }
 

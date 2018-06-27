@@ -13,10 +13,13 @@
     <string name="tv_vote_average_label">Vote-Average</string>
     <string name="tv_plot_label">Plot</string>
 
-    <string name="movie_backdrop_content_description">Movie backdrop image</string>
+    <string name="movie_poster_iv_content_desc">Movie Poster Image</string>
+
 
     <string name="content_provider_authorities">com.example.popularmovies</string>
-    <string name="movie_poster_iv_content_desc">Movie Poster Image</string>
     <string name="mark_as_favorite_button">Mark As Favorite</string>
+
+    <string name="fav_toggle_btn_off">Mark As Favorite</string>
+    <string name="fav_toggle_btn_on">Favorite</string>
 
 </resources>

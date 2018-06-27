@@ -7,92 +7,112 @@
     android:layout_height="wrap_content">
 
     <android.support.constraint.ConstraintLayout
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/tv_movie_title_label"
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorSecondary"
-            android:padding="16dp"
-            android:textColor="@color/white"
-            android:textSize="32dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Movie" />
+            android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/iv_movie_poster"
-            android:layout_width="126dp"
-            android:layout_height="168dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="4dp"
-            android:adjustViewBounds="true"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_movie_title_label"
-            app:srcCompat="@drawable/place_holder_image" />
 
-        <TextView
-            android:id="@+id/tv_release_year"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-            android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/iv_movie_poster"
-            app:layout_constraintTop_toBottomOf="@+id/tv_movie_title_label"
-            tools:text="2015" />
+            <TextView
+                android:id="@+id/tv_movie_title_label"
+                android:layout_width="match_parent"
+                android:layout_height="79dp"
+                android:background="@color/colorSecondary"
+                android:padding="16dp"
+                android:textColor="@color/white"
+                android:textSize="32dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Movie" />
 
-        <!--<TextView-->
-            <!--android:id="@+id/tv_movie_total_time"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginLeft="16dp"-->
-            <!--android:layout_marginStart="16dp"-->
-            <!--android:layout_marginTop="4dp"-->
-            <!--android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"-->
-            <!--android:textStyle="bold"-->
-            <!--app:layout_constraintStart_toEndOf="@+id/iv_movie_poster"-->
-            <!--app:layout_constraintTop_toBottomOf="@+id/tv_release_year"-->
-            <!--tools:text="120min" />-->
+            <android.support.constraint.Guideline
+                android:id="@+id/horizontal_middle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5" />
 
-        <TextView
-            android:id="@+id/tv_vote_average"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-            android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/iv_movie_poster"
-            app:layout_constraintTop_toBottomOf="@+id/tv_release_year"
-            tools:text="8.1/10" />
+            <ImageView
+                android:id="@+id/iv_movie_poster"
+                android:layout_width="143dp"
+                android:layout_height="183dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/movie_poster_iv_content_desc"
+                android:scaleType="fitXY"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/horizontal_middle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_movie_title_label"
+                app:srcCompat="@drawable/place_holder_image" />
 
-        <ToggleButton
-            android:id="@+id/fav_button"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:text="@string/mark_as_favorite_button"
-            app:layout_constraintBottom_toBottomOf="@+id/iv_movie_poster"
-            app:layout_constraintStart_toEndOf="@+id/iv_movie_poster"
-            app:layout_constraintTop_toBottomOf="@+id/tv_vote_average" />
+            <TextView
+                android:id="@+id/tv_release_year"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/horizontal_middle"
+                app:layout_constraintTop_toBottomOf="@+id/tv_movie_title_label"
+                tools:text="2015" />
+
+
+            <TextView
+                android:id="@+id/tv_vote_average"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/horizontal_middle"
+                app:layout_constraintTop_toBottomOf="@+id/tv_release_year"
+                tools:text="8.1/10" />
+
+            <ToggleButton
+                android:id="@+id/fav_Button"
+                android:layout_width="51dp"
+                android:layout_height="51dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:textOff=""
+                android:textOn=""
+                app:layout_constraintStart_toStartOf="@+id/horizontal_middle"
+                app:layout_constraintTop_toBottomOf="@+id/tv_vote_average" />
+
+        </android.support.constraint.ConstraintLayout>
 
         <TextView
             android:id="@+id/tv_plot"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="16dp"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iv_movie_poster"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
             tools:text="@string/tv_plot_label" />
 
+       <!-- <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_trailer_reviews"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_plot">
+
+        </android.support.v7.widget.RecyclerView>
+-->
+
     </android.support.constraint.ConstraintLayout>
+
 </ScrollView>

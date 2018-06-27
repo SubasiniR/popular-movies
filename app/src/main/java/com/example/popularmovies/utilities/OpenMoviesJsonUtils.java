@@ -18,11 +18,10 @@ public class OpenMoviesJsonUtils {
     /* Movies information. Each movie's info is an element of the "results" array */
     private static final String MOVIES_RESULTS = "results";
 
+    private static final String MOVIE_ID = "id";
     private static final String MOVIE_TITLE = "title";
-
     private static final String MOVIE_RELEASE_DATE = "release_date";
     private static final String MOVIE_POSTER_PATH = "poster_path";
-    private static final String MOVIE_BACKDROP_PATH = "backdrop_path";
     private static final String MOVIE_VOTE_AVERAGE = "vote_average";
     private static final String MOVIE_PLOT = "overview";
 
@@ -40,30 +39,31 @@ public class OpenMoviesJsonUtils {
 
         for (int i = 0; i < movieResultsJsonArray.length(); i++) {
 
+            int movieId;
             String title;
             String releaseDate;
             String posterPath;
-            String backdropPath;
-            int vote_average;
+            String vote_average;
             String plot;
 
             /* Get the JSON object representing the movie */
             JSONObject movieObject = movieResultsJsonArray.getJSONObject(i);
 
+            movieId = movieObject.getInt(MOVIE_ID);
+
             title = movieObject.getString(MOVIE_TITLE);
             releaseDate = movieObject.getString(MOVIE_RELEASE_DATE);
             posterPath = movieObject.getString(MOVIE_POSTER_PATH);
-            backdropPath = movieObject.getString(MOVIE_BACKDROP_PATH);
-            vote_average = movieObject.getInt(MOVIE_VOTE_AVERAGE);
+            vote_average = movieObject.getString(MOVIE_VOTE_AVERAGE);
             plot = movieObject.getString(MOVIE_PLOT);
 
             ContentValues movieValues = new ContentValues();
-            movieValues.put(MoviesContract.MoviesEntry.COLUMN_TITLE, title);
-            movieValues.put(MoviesContract.MoviesEntry.COLUMN_RELEASE_DATE, releaseDate);
-            movieValues.put(MoviesContract.MoviesEntry.COLUMN_MOVIE_BACKDROP_LINK, backdropPath);
+            movieValues.put(MoviesContract.MoviesEntry.COLUMN_MOVIE_ID, movieId);
+            movieValues.put(MoviesContract.MoviesEntry.COLUMN_MOVIE_TITLE, title);
+            movieValues.put(MoviesContract.MoviesEntry.COLUMN_MOVIE_RELEASE_DATE, releaseDate);
             movieValues.put(MoviesContract.MoviesEntry.COLUMN_MOVIE_POSTER_LINK, posterPath);
-            movieValues.put(MoviesContract.MoviesEntry.COLUMN_VOTE_AVERAGE, vote_average);
-            movieValues.put(MoviesContract.MoviesEntry.COLUMN_PLOT_SYNOPSIS, plot);
+            movieValues.put(MoviesContract.MoviesEntry.COLUMN_MOVIE_VOTE_AVERAGE, vote_average);
+            movieValues.put(MoviesContract.MoviesEntry.COLUMN_MOVIE_PLOT_SYNOPSIS, plot);
 
             movieContentValues[i] = movieValues;
         }

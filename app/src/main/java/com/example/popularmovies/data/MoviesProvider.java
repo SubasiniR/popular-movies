@@ -1,12 +1,17 @@
 package com.example.popularmovies.data;
 
 import android.content.ContentProvider;
+import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+
+import com.example.popularmovies.data.MoviesContract.MoviesEntry;
+
 
 /**
  * Created by rosha on 5/16/2018.
@@ -14,7 +19,35 @@ import android.support.annotation.Nullable;
 
 public class MoviesProvider extends ContentProvider {
 
+    public static final int CODE_MOVIES_LIST = 100;
+    public static final int CODE_MOVIES_FAV = 200;
+    public static final int CODE_MOVIE_DETAILS = 300;
+    public static final int CODE_MOVIES_LIST_ID = 400;
+    public static final int CODE_MOVIES_FAV_ID = 500;
+
+    private static final UriMatcher sUriMatcher = buildUriMatcher();
+
     private MoviesDbHelper mOpenHelper;
+
+    public static UriMatcher buildUriMatcher() {
+
+        final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
+        final String authority = MoviesContract.CONTENT_AUTHORITY;
+
+
+        matcher.addURI(authority, MoviesContract.PATH_MOVIES, CODE_MOVIES_LIST);
+
+        matcher.addURI(authority, MoviesContract.PATH_MOVIES + "/#", CODE_MOVIES_LIST_ID);
+
+        matcher.addURI(authority, MoviesContract.PATH_MOVIES_FAV, CODE_MOVIES_FAV);
+
+        matcher.addURI(authority, MoviesContract.PATH_MOVIES_FAV + "/#", CODE_MOVIES_FAV_ID);
+
+        matcher.addURI(authority, MoviesContract.PATH_MOVIE_DETAILS, CODE_MOVIE_DETAILS);
+
+
+        return matcher;
+    }
 
     @Override
     public boolean onCreate() {
@@ -26,23 +59,18 @@ public class MoviesProvider extends ContentProvider {
     public int bulkInsert(@NonNull Uri uri, @NonNull ContentValues[] values) {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
 
-//        switch (sUriMatcher.match(uri)) {
-//
-//            case CODE_WEATHER:
         db.beginTransaction();
         int rowsInserted = 0;
         try {
             for (ContentValues value : values) {
-//                        long weatherDate =
-//                                value.getAsLong(WeatherContract.WeatherEntry.COLUMN_DATE);
-//                        if (!SunshineDateUtils.isDateNormalized(weatherDate)) {
-//                            throw new IllegalArgumentException("Date must be normalized to insert");
-//                        }
 
                 long _id = db.insert(MoviesContract.MoviesEntry.TABLE_NAME, null, value);
+
                 if (_id != -1) {
                     rowsInserted++;
                 }
+
+
             }
             db.setTransactionSuccessful();
         } finally {
@@ -54,25 +82,79 @@ public class MoviesProvider extends ContentProvider {
         }
 
         return rowsInserted;
-
-//            default:
-//                return super.bulkInsert(uri, values);
-//        }
     }
 
     @Override
     public Cursor query(@NonNull Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
 
-        Cursor cursor = mOpenHelper.getReadableDatabase().query(
-                MoviesContract.MoviesEntry.TABLE_NAME,
-                projection,
-                selection,
-                selectionArgs,
-                null,
-                null,
-                null);
+        Cursor cursor;
+        switch (sUriMatcher.match(uri)) {
 
+            case CODE_MOVIES_LIST: {
+
+                cursor = mOpenHelper.getReadableDatabase().query(
+                        MoviesContract.MoviesEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        null);
+
+                break;
+            }
+
+            case CODE_MOVIES_LIST_ID: {
+
+                selection = MoviesEntry.COLUMN_MOVIE_ID + "=?";
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                cursor = mOpenHelper.getReadableDatabase().query(
+                        MoviesContract.MoviesEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        null);
+
+                break;
+            }
+
+            case CODE_MOVIES_FAV: {
+
+                cursor = mOpenHelper.getReadableDatabase().query(
+                        MoviesContract.MoviesEntry.TABLE_NAME_FAV,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        null);
+
+                break;
+            }
+
+            case CODE_MOVIES_FAV_ID: {
+
+                selection = MoviesEntry.COLUMN_FAV_ID + " = ? ";
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+
+                cursor = mOpenHelper.getReadableDatabase().query(
+                        MoviesEntry.TABLE_NAME_FAV,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        null);
+                break;
+            }
+
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+
+        }
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
         return cursor;
 
@@ -81,23 +163,31 @@ public class MoviesProvider extends ContentProvider {
     @Override
     public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
 
-        /* Users of the delete method will expect the number of rows deleted to be returned. */
         int numRowsDeleted;
 
-        /*
-         * If we pass null as the selection to SQLiteDatabase#delete, our entire table will be
-         * deleted. However, if we do pass null and delete all of the rows in the table, we won't
-         * know how many rows were deleted. According to the documentation for SQLiteDatabase,
-         * passing "1" for the selection will delete all rows and return the number of rows
-         * deleted, which is what the caller of this method expects.
-         */
         if (null == selection) {
             selection = "1";
         }
-        numRowsDeleted = mOpenHelper.getWritableDatabase().delete(
-                MoviesContract.MoviesEntry.TABLE_NAME,
-                selection,
-                selectionArgs);
+        switch (sUriMatcher.match(uri)) {
+
+            case CODE_MOVIES_LIST:
+                numRowsDeleted = mOpenHelper.getWritableDatabase().delete(
+                        MoviesContract.MoviesEntry.TABLE_NAME,
+                        selection,
+                        selectionArgs);
+                break;
+
+            case CODE_MOVIES_FAV:
+                numRowsDeleted = mOpenHelper.getWritableDatabase().delete(
+                        MoviesEntry.TABLE_NAME_FAV,
+                        selection,
+                        selectionArgs);
+                break;
+
+            default:
+                throw new RuntimeException("Method not implemented");
+
+        }
 
         /* If we actually deleted any rows, notify that a change has occurred to this URI */
         if (numRowsDeleted != 0) {
@@ -114,12 +204,35 @@ public class MoviesProvider extends ContentProvider {
 
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues contentValues) {
-        throw new RuntimeException("Method not implemented");
+
+        Uri uriOfRowInserted = null;
+        long _id;
+
+        switch (sUriMatcher.match(uri)) {
+            case CODE_MOVIES_FAV:
+                _id = mOpenHelper.getWritableDatabase()
+                        .insert(MoviesEntry.TABLE_NAME_FAV,
+                                null,
+                                contentValues);
+                break;
+            default:
+                throw new RuntimeException("Method not implemented");
+
+        }
+
+        if (_id != -1) {
+            uriOfRowInserted = Uri.parse(String.valueOf(uri))
+                    .buildUpon()
+                    .appendPath(String.valueOf(_id))
+                    .build();
+        }
+
+        return uriOfRowInserted;
     }
 
 
     @Override
-    public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String s, @Nullable String[] strings) {
+    public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String selection, @Nullable String[] selectionArgs) {
         throw new RuntimeException("Method not implemented");
     }
 }
