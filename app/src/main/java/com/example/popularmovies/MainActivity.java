@@ -23,7 +23,7 @@ import com.example.popularmovies.data.MoviesContract;
 import com.example.popularmovies.sync.MoviesSyncUtils;
 
 public class MainActivity extends AppCompatActivity implements LoaderCallbacks<Cursor>,
-        MoviesAdapter.MoviesAdapterOnClickHandler {
+        MoviesAdapter.MoviesAdapterOnClickHandler{
 
     public static final String MOVIE_ID = "movieId";
     public static final String TITLE = "title";

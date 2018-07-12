@@ -2,7 +2,6 @@ package com.example.popularmovies.utilities;
 
 import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
 
 import com.example.popularmovies.BuildConfig;
 
@@ -18,8 +17,6 @@ import java.util.Scanner;
  */
 
 public final class NetworkUtils {
-
-    final static String POPULAR_MOVIES = "popular";
 
     final static String API_KEY_STRING = "api_key";
     private static final String TAG = NetworkUtils.class.getSimpleName();
@@ -49,6 +46,29 @@ public final class NetworkUtils {
 
     }
 
+    public static URL getTrailerAndReviewUrl(String movieId, String path) {
+        return buildTrailerAndReviewUrl(movieId, path);
+    }
+
+    private static URL buildTrailerAndReviewUrl(String movieId, String path) {
+
+        Uri builtUri = Uri.parse(MOVIES_BASE_URL)
+                .buildUpon()
+                .appendPath(movieId)
+                .appendPath(path)
+                .appendQueryParameter(API_KEY_STRING, API_KEY)
+                .build();
+
+        URL url = null;
+        try {
+            url = new URL(builtUri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        return url;
+    }
+
+
     public static URL buildImageUrl(String imagePartUrl){
         Uri builtUri = Uri.parse(IMAGE_BASE_URL).buildUpon()
                 .appendEncodedPath(imagePartUrl)
@@ -60,8 +80,6 @@ public final class NetworkUtils {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-
-        Log.v(TAG, "Built URI " + url);
 
         return url;
     }
@@ -79,15 +97,13 @@ public final class NetworkUtils {
             e.printStackTrace();
         }
 
-        Log.v(TAG, "Built URI " + url);
-
         return url;
     }
 
     public static String getResponseFromHttpUrl(URL url) throws IOException {
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         try {
-            InputStream in = urlConnection.getInputStream();
+           InputStream in = urlConnection.getInputStream();
 
             Scanner scanner = new Scanner(in);
             scanner.useDelimiter("\\A");

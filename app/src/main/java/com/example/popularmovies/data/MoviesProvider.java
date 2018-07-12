@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.example.popularmovies.data.MoviesContract.MoviesEntry;
 
@@ -24,6 +25,8 @@ public class MoviesProvider extends ContentProvider {
     public static final int CODE_MOVIE_DETAILS = 300;
     public static final int CODE_MOVIES_LIST_ID = 400;
     public static final int CODE_MOVIES_FAV_ID = 500;
+    public static final int CODE_TRAILERS = 600;
+    public static final int CODE_REVIEWS = 700;
 
     private static final UriMatcher sUriMatcher = buildUriMatcher();
 
@@ -43,7 +46,9 @@ public class MoviesProvider extends ContentProvider {
 
         matcher.addURI(authority, MoviesContract.PATH_MOVIES_FAV + "/#", CODE_MOVIES_FAV_ID);
 
-        matcher.addURI(authority, MoviesContract.PATH_MOVIE_DETAILS, CODE_MOVIE_DETAILS);
+        matcher.addURI(authority, MoviesContract.PATH_TRAILERS, CODE_TRAILERS);
+
+        matcher.addURI(authority, MoviesContract.PATH_REVIEWS, CODE_REVIEWS);
 
 
         return matcher;
@@ -64,13 +69,30 @@ public class MoviesProvider extends ContentProvider {
         try {
             for (ContentValues value : values) {
 
-                long _id = db.insert(MoviesContract.MoviesEntry.TABLE_NAME, null, value);
+                long _id;
 
+                switch (sUriMatcher.match(uri)) {
+
+                    case CODE_MOVIES_LIST:
+
+                        _id = db.insert(MoviesContract.MoviesEntry.TABLE_NAME, null, value);
+                        break;
+
+                    case CODE_TRAILERS:
+                        _id = db.insert(MoviesEntry.TABLE_NAME_TRAILER, null, value);
+                        break;
+
+                    case CODE_REVIEWS:
+                        _id = db.insert(MoviesEntry.TABLE_NAME_REVIEW, null, value);
+                        break;
+
+                    default:
+                        _id = -1;
+                }
                 if (_id != -1) {
                     rowsInserted++;
+
                 }
-
-
             }
             db.setTransactionSuccessful();
         } finally {
@@ -88,12 +110,14 @@ public class MoviesProvider extends ContentProvider {
     public Cursor query(@NonNull Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
 
+        final SQLiteDatabase db = mOpenHelper.getReadableDatabase();
+
         Cursor cursor;
         switch (sUriMatcher.match(uri)) {
 
             case CODE_MOVIES_LIST: {
 
-                cursor = mOpenHelper.getReadableDatabase().query(
+                cursor = db.query(
                         MoviesContract.MoviesEntry.TABLE_NAME,
                         projection,
                         selection,
@@ -109,7 +133,7 @@ public class MoviesProvider extends ContentProvider {
 
                 selection = MoviesEntry.COLUMN_MOVIE_ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
-                cursor = mOpenHelper.getReadableDatabase().query(
+                cursor = db.query(
                         MoviesContract.MoviesEntry.TABLE_NAME,
                         projection,
                         selection,
@@ -123,7 +147,7 @@ public class MoviesProvider extends ContentProvider {
 
             case CODE_MOVIES_FAV: {
 
-                cursor = mOpenHelper.getReadableDatabase().query(
+                cursor = db.query(
                         MoviesContract.MoviesEntry.TABLE_NAME_FAV,
                         projection,
                         selection,
@@ -140,8 +164,34 @@ public class MoviesProvider extends ContentProvider {
                 selection = MoviesEntry.COLUMN_FAV_ID + " = ? ";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
 
-                cursor = mOpenHelper.getReadableDatabase().query(
+                cursor = db.query(
                         MoviesEntry.TABLE_NAME_FAV,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        null);
+                break;
+            }
+
+            case CODE_TRAILERS: {
+
+                cursor = db.query(
+                        MoviesEntry.TABLE_NAME_TRAILER,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        null);
+                break;
+            }
+
+            case CODE_REVIEWS: {
+
+                cursor = db.query(
+                        MoviesEntry.TABLE_NAME_REVIEW,
                         projection,
                         selection,
                         selectionArgs,
@@ -180,6 +230,21 @@ public class MoviesProvider extends ContentProvider {
             case CODE_MOVIES_FAV:
                 numRowsDeleted = mOpenHelper.getWritableDatabase().delete(
                         MoviesEntry.TABLE_NAME_FAV,
+                        selection,
+                        selectionArgs);
+                break;
+
+            case CODE_TRAILERS:
+                numRowsDeleted = mOpenHelper.getWritableDatabase().delete(
+                        MoviesEntry.TABLE_NAME_TRAILER,
+                        selection,
+                        selectionArgs);
+                Log.e("trailerRows deleted: ", numRowsDeleted+"");
+                break;
+
+            case CODE_REVIEWS:
+                numRowsDeleted = mOpenHelper.getWritableDatabase().delete(
+                        MoviesEntry.TABLE_NAME_REVIEW,
                         selection,
                         selectionArgs);
                 break;

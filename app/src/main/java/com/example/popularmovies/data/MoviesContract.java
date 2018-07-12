@@ -17,7 +17,9 @@ public class MoviesContract {
 
     public static final String PATH_MOVIES_FAV = "favorites";
 
-    public static final String PATH_MOVIE_DETAILS = "details";
+    public static final String PATH_TRAILERS = "trailers";
+
+    public static final String PATH_REVIEWS = "reviews";
 
 
     /* Inner class that defines the table contents of the movies table */
@@ -32,15 +34,22 @@ public class MoviesContract {
                 .appendPath(PATH_MOVIES_FAV)
                 .build();
 
-        public static final Uri CONTENT_URI_DETAILS = BASE_CONTENT_URI.buildUpon()
-                .appendPath(PATH_MOVIE_DETAILS)
+        public static final Uri CONTENT_URI_TRAILER = BASE_CONTENT_URI.buildUpon()
+                .appendPath(PATH_TRAILERS)
                 .build();
+        public static final Uri CONTENT_URI_REVIEW =BASE_CONTENT_URI.buildUpon()
+                .appendPath(PATH_REVIEWS)
+                .build();
+
 
         //TABLE NAMES
         public static final String TABLE_NAME = "movies_list";
 
         public static final String TABLE_NAME_FAV = "fav_list";
 
+        public static final String TABLE_NAME_TRAILER = "trailer_info";
+
+        public static final String TABLE_NAME_REVIEW = "review_info";
 
         //COLUMN NAMES FOR MOVIE_LIST TABLE
         public static final String COLUMN_MOVIE_ID = "movie_id";
@@ -58,8 +67,13 @@ public class MoviesContract {
         public static final String COLUMN_FAV_VOTE_AVERAGE = "vote_average";
         public static final String COLUMN_FAV_PLOT_SYNOPSIS = "plot";
 
+        //COLUMN NAMES FOR TRAILER_INFO TABLE
+        public static final String COLUMN_TRAILER_ID = "trailer_id";
+        public static final String COLUMN_TRAILER_NAME = "trailer_name";
 
-
+        //COLUMN NAMES FOR REVIEW_INFO TABLE
+        public static final String COLUMN_REVIEW_AUTHOR = "review_author";
+        public static final String COLUMN_REVIEW_CONTENT = "review_content";
     }
 
 }

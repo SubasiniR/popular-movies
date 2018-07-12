@@ -25,7 +25,12 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesAdap
     private final MoviesAdapterOnClickHandler mClickHandler;
 
     public interface MoviesAdapterOnClickHandler{
-        void onClick(int id, String title, String releaseDate, String poster, String vote, String plot);
+        void onClick(int id,
+                     String title,
+                     String releaseDate,
+                     String poster,
+                     String vote,
+                     String plot);
     }
 
     private Cursor mCursor;
