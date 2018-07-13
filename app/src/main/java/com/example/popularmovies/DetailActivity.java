@@ -200,7 +200,6 @@ public class DetailActivity extends AppCompatActivity implements
 
     }
 
-
     public Boolean MovieExistsInFav(String movieId) {
 
 
@@ -239,7 +238,7 @@ public class DetailActivity extends AppCompatActivity implements
     @Override
     public void onClick(Context context, String trailerId) {
 
-        Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:"+trailerId));
+        Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + trailerId));
 
         Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + trailerId));
         try {
