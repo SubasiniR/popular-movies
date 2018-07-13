@@ -2,7 +2,6 @@ package com.example.popularmovies.utilities;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.util.Log;
 
 import com.example.popularmovies.data.MoviesContract;
 
@@ -31,7 +30,7 @@ public class OpenMoviesJsonUtils {
     private static final String MOVIE_VOTE_AVERAGE = "vote_average";
     private static final String MOVIE_PLOT = "overview";
 
-    private static final String TRAILER_ID = "id";
+    private static final String TRAILER_ID = "key";
     private static final String TRAILER_NAME = "name";
 
     private static final String REVIEW_AUTHOR = "author";
