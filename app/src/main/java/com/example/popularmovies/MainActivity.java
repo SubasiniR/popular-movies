@@ -7,16 +7,17 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import com.example.popularmovies.data.MoviesContract;
@@ -53,10 +54,14 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<C
 
     private static final int MOVIES_LOADER_ID = 44;
     private static final int FAVORITE_MOVIES_LOADER_ID = 55;
+    private static final String LIST_STATE_KEY = "list_state" ;
 
     private RecyclerView mRecyclerView;
-    private int mPosition = RecyclerView.NO_POSITION;
     private MoviesAdapter mMoviesAdapter;
+
+    Parcelable mListState;
+
+    RecyclerView.LayoutManager mLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +71,8 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<C
 
         mRecyclerView = findViewById(R.id.rv_movies_thumbnail);
         int numberOfColumns = 2;
-        mRecyclerView.setLayoutManager(new GridLayoutManager(this, numberOfColumns));
+        mLayoutManager = new GridLayoutManager(this, numberOfColumns);
+        mRecyclerView.setLayoutManager(mLayoutManager);
         mMoviesAdapter = new MoviesAdapter(this, this);
         mRecyclerView.setAdapter(mMoviesAdapter);
 
@@ -77,6 +83,31 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<C
             Toast.makeText(this, "Network not available. Check the internet connection.", Toast.LENGTH_LONG).show();
         }
 
+
+    }
+
+    protected void onSaveInstanceState(Bundle state) {
+        super.onSaveInstanceState(state);
+
+        mListState = mLayoutManager.onSaveInstanceState();
+        state.putParcelable(LIST_STATE_KEY, mListState);
+    }
+
+    protected void onRestoreInstanceState(Bundle state) {
+        super.onRestoreInstanceState(state);
+
+        if(state != null)
+            mListState = state.getParcelable(LIST_STATE_KEY);
+        Log.e("listState", String.valueOf(mListState));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (mListState != null) {
+            mLayoutManager.onRestoreInstanceState(mListState);
+        }
     }
 
     @Override
@@ -116,18 +147,10 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<C
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
         mMoviesAdapter.swapCursor(data);
-        if (mPosition == RecyclerView.NO_POSITION) {
-            mPosition = 0;
-        }
-        mRecyclerView.smoothScrollToPosition(mPosition);
-        if (data.getCount() != 0) {
-            showMoviesDataView();
-        }
 
-    }
-
-    private void showMoviesDataView() {
-        mRecyclerView.setVisibility(View.VISIBLE);
+        if (mListState != null) {
+            mLayoutManager.onRestoreInstanceState(mListState);
+        }
     }
 
     @Override
