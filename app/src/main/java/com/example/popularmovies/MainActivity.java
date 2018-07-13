@@ -14,7 +14,6 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -24,7 +23,7 @@ import com.example.popularmovies.data.MoviesContract;
 import com.example.popularmovies.sync.MoviesSyncUtils;
 
 public class MainActivity extends AppCompatActivity implements LoaderCallbacks<Cursor>,
-        MoviesAdapter.MoviesAdapterOnClickHandler{
+        MoviesAdapter.MoviesAdapterOnClickHandler {
 
     public static final String MOVIE_ID = "movieId";
     public static final String TITLE = "title";
@@ -54,14 +53,11 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<C
 
     private static final int MOVIES_LOADER_ID = 44;
     private static final int FAVORITE_MOVIES_LOADER_ID = 55;
-    private static final String LIST_STATE_KEY = "list_state" ;
-
+    private static final String LIST_STATE_KEY = "list_state";
+    Parcelable mListState;
+    RecyclerView.LayoutManager mLayoutManager;
     private RecyclerView mRecyclerView;
     private MoviesAdapter mMoviesAdapter;
-
-    Parcelable mListState;
-
-    RecyclerView.LayoutManager mLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,9 +92,8 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<C
     protected void onRestoreInstanceState(Bundle state) {
         super.onRestoreInstanceState(state);
 
-        if(state != null)
+        if (state != null)
             mListState = state.getParcelable(LIST_STATE_KEY);
-        Log.e("listState", String.valueOf(mListState));
     }
 
     @Override
@@ -184,11 +179,10 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<C
 
             MoviesSyncUtils.startImmediateSync(MainActivity.this, TOP_RATED_SORT_PREFERENCE);
 
-
             return true;
         }
 
-        if(id == R.id.action_favorite){
+        if (id == R.id.action_favorite) {
 
             item.setChecked(true);
 
